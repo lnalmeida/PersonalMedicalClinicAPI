@@ -1,6 +1,9 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using PMC.Data.Context;
+using PMC.Data.Repositories;
+using PMC.Manager.Implementation;
+using PMC.Manager.Interfaces;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -10,6 +13,8 @@ string strConnection = builder.Configuration.GetConnectionString("PMC_Connection
 
 builder.Services.AddControllers();
 builder.Services.AddDbContext<PMC_Context>(options => options.UseSqlServer(strConnection));
+builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
+builder.Services.AddScoped<IClienteManager, ClienteManager>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();

@@ -1,5 +1,7 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMC.Core.Domain;
+using PMC.Manager.Implementation;
+using PMC.Manager.Interfaces;
 
 namespace PMC.WebAPI.Controllers
 {
@@ -7,30 +9,22 @@ namespace PMC.WebAPI.Controllers
     [ApiController]
     public class ClientesController : ControllerBase
     {
-        [HttpGet]
-        public IActionResult Get()
+        private readonly IClienteManager _clienteManager;
+        public ClientesController(IClienteManager clienteManager) 
         {
-            return Ok( new List<Cliente>()
-            {
-                new Cliente()
-                {
-                    Id = 1,
-                    Name = "João Pedro",
-                    BirthDate = new DateTime(2001, 06, 02)
-                },
-                                new Cliente()
-                {
-                    Id = 2,
-                    Name = "Nícolas",
-                    BirthDate = new DateTime(2005, 10, 29)
-                }
-            });
+            _clienteManager = clienteManager;
+        }
+
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            return Ok( await _clienteManager.GetAllClientsAsync());
         }
 
         [HttpGet("{id}")]
-        public string Get(int id)
+        public async Task<IActionResult> GetById(int id)
         {
-            return "value";
+            return Ok( await _clienteManager.GetClientByIdAsync(id));
         }
 
         [HttpPost]

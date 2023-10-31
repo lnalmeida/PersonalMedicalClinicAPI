@@ -21,6 +21,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\PMC.Core\PMC.Core.csproj" />
+    <ProjectReference Include="..\PMC.Manager\PMC.Manager.csproj" />
   </ItemGroup>
 
 </Project>

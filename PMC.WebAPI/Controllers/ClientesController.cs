@@ -28,18 +28,29 @@ namespace PMC.WebAPI.Controllers
         }
 
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post(Cliente cliente)
         {
+            var novoCliente = await _clienteManager.InsertClientAsync(cliente);
+            return CreatedAtAction(nameof(GetById), new { id = cliente.Id }, cliente);
         }
 
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
+        [HttpPut()]
+        public async Task<IActionResult> Put(Cliente cliente)
         {
+            var clienteAQtualizado = await _clienteManager.UpdateClientAsync(cliente);
+            if(clienteAQtualizado == null)
+            {
+                return BadRequest("Cliente não encontrado");
+            }
+
+            return Ok(clienteAQtualizado);  
         }
 
         [HttpDelete("{id}")]
-        public void Delete(int id)
+        public async Task<IActionResult> Delete(int id)
         {
+            await _clienteManager.DeleteClientAsync(id);
+            return NoContent();
         }
     }
 }

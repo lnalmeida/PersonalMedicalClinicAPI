@@ -1,4 +1,5 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using Microsoft.AspNetCore.Mvc;
+using Microsoft.EntityFrameworkCore;
 using PMC.Core.Domain;
 using PMC.Data.Context;
 using PMC.Manager.Interfaces;
@@ -26,6 +27,37 @@ namespace PMC.Data.Repositories
         public async Task<Cliente> GetClientByIdAsync(int id)
         {
             return await _context.Clientes.FindAsync(id);
+        }
+
+        //insert
+        public async Task<Cliente> InsertClientAsync(Cliente cliente)
+        {
+            await _context.Clientes.AddAsync(cliente);
+            await _context.SaveChangesAsync();
+            return cliente;
+        }
+
+        //update
+        public async Task<Cliente> UpdateClientAsync(Cliente cliente)
+        {
+            var clienteAtual = await _context.Clientes.FindAsync(cliente.Id);
+            if(clienteAtual == null)
+            {
+                return null;
+            }
+
+            _context.Entry(clienteAtual).CurrentValues.SetValues(cliente);
+            await _context.SaveChangesAsync();
+            return clienteAtual;
+        }
+
+        //delete
+        public async Task DeleteClientAsync(int id)
+        {
+            var clienteAtual = await _context.Clientes.FindAsync(id);
+            _context.Clientes.Remove(clienteAtual);
+            await _context.SaveChangesAsync();
+
         }
     }
 }

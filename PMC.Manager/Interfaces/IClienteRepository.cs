@@ -11,5 +11,8 @@ namespace PMC.Manager.Interfaces
     {
         Task<IEnumerable<Cliente>> GetAllClientsAsync();
         Task<Cliente> GetClientByIdAsync(int id);
+        Task<Cliente> InsertClientAsync(Cliente cliente);
+        Task<Cliente> UpdateClientAsync(Cliente cliente);
+        Task DeleteClientAsync(int id);
     }
 }

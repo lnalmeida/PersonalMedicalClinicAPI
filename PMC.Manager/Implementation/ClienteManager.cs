@@ -25,5 +25,22 @@ namespace PMC.Manager.Implementation
         {
             return await _clienteRepository.GetClientByIdAsync(id);
         }
+
+        public async Task<Cliente> InsertClientAsync(Cliente cliente)
+        {
+           return await _clienteRepository.InsertClientAsync(cliente);
+        }
+
+        //update
+        public async Task<Cliente> UpdateClientAsync(Cliente cliente)
+        {
+            return await _clienteRepository.UpdateClientAsync(cliente);
+        }
+
+        //delete
+        public async Task DeleteClientAsync(int id)
+        {
+            await _clienteRepository.DeleteClientAsync(id);
+        }
     }
 }

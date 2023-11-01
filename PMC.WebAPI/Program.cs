@@ -1,17 +1,37 @@
+using FluentValidation;
+using FluentValidation.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using PMC.Data.Context;
 using PMC.Data.Repositories;
 using PMC.Manager.Implementation;
 using PMC.Manager.Interfaces;
+using PMC.Manager.Validators;
+using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
 
-string strConnection = builder.Configuration.GetConnectionString("PMC_Connection");
+string strConnection = builder.Configuration.GetConnectionString("PMC_Connection") ?? string.Empty;
 
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+//maneiras descontinuadas de add fluent validation:
+
+//.AddFluentValidation(p => p.RegisterValidatorsFromAssemblyContaining<ClienteValidator>());
+
+//builder.Services.AddFluentValidation(p => p.RegisterValidatorsFromAssemblyContaining<ClienteValidator>());
+
+//builder.Services.AddFluentValidation(p => p.ValidatorOptions.LanguageManager.Culture = new CultureInfo("pt-BR"));
+
+//validators
+builder.Services.AddFluentValidationAutoValidation();
+builder.Services.AddFluentValidationClientsideAdapters();
+ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("pt-BR");
+builder.Services.AddValidatorsFromAssemblyContaining<ClienteValidator>();
+
+//contexts
 builder.Services.AddDbContext<PMC_Context>(options => options.UseSqlServer(strConnection));
 builder.Services.AddScoped<IClienteRepository, ClienteRepository>();
 builder.Services.AddScoped<IClienteManager, ClienteManager>();

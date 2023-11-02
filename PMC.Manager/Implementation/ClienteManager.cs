@@ -1,4 +1,6 @@
-﻿using PMC.Core.Domain;
+﻿using AutoMapper;
+using PMC.Core.Domain;
+using PMC.Core.Shared.ModelViews;
 using PMC.Manager.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -11,9 +13,11 @@ namespace PMC.Manager.Implementation
     public class ClienteManager: IClienteManager
     {
         private readonly IClienteRepository _clienteRepository;
-        public ClienteManager(IClienteRepository clienteRepository) 
+        private readonly IMapper _mapper;
+        public ClienteManager(IClienteRepository clienteRepository, IMapper mapper) 
         {
             _clienteRepository = clienteRepository;
+            _mapper = mapper;
         }
 
         public async Task<IEnumerable<Cliente>> GetAllClientsAsync()
@@ -26,14 +30,16 @@ namespace PMC.Manager.Implementation
             return await _clienteRepository.GetClientByIdAsync(id);
         }
 
-        public async Task<Cliente> InsertClientAsync(Cliente cliente)
+        public async Task<Cliente> InsertClientAsync(NewClienteModelView newCliente)
         {
+           var cliente =  _mapper.Map<Cliente>(newCliente);
            return await _clienteRepository.InsertClientAsync(cliente);
         }
 
         //update
-        public async Task<Cliente> UpdateClientAsync(Cliente cliente)
+        public async Task<Cliente> UpdateClientAsync(UpdateClienteModelView clienteToUpdate)
         {
+            var cliente = _mapper.Map<Cliente>(clienteToUpdate);
             return await _clienteRepository.UpdateClientAsync(cliente);
         }
 

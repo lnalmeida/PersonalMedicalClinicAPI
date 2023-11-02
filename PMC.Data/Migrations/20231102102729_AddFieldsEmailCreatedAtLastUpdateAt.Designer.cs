@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using PMC.Data.Context;
 
@@ -11,9 +12,11 @@ using PMC.Data.Context;
 namespace PMC.Data.Migrations
 {
     [DbContext(typeof(PMC_Context))]
-    partial class PMC_ContextModelSnapshot : ModelSnapshot
+    [Migration("20231102102729_AddFieldsEmailCreatedAtLastUpdateAt")]
+    partial class AddFieldsEmailCreatedAtLastUpdateAt
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

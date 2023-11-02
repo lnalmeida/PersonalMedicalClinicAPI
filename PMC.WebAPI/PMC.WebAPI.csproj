@@ -9,6 +9,8 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <PackageReference Include="automapper" Version="12.0.1" />
+    <PackageReference Include="automapper.extensions.microsoft.dependencyinjection" Version="12.0.1" />
     <PackageReference Include="FluentValidation.AspNetCore" Version="11.3.0" />
     <PackageReference Include="Microsoft.EntityFrameworkCore" Version="7.0.12" />
     <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="7.0.12">
@@ -25,6 +27,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\PMC.Core.Shared\PMC.Core.Shared.csproj" />
     <ProjectReference Include="..\PMC.Core\PMC.Core.csproj" />
     <ProjectReference Include="..\PMC.Data\PMC.Data.csproj" />
   </ItemGroup>

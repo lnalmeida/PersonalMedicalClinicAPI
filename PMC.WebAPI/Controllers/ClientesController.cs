@@ -1,5 +1,6 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using PMC.Core.Domain;
+using PMC.Core.Shared.ModelViews;
 using PMC.Manager.Implementation;
 using PMC.Manager.Interfaces;
 
@@ -28,14 +29,14 @@ namespace PMC.WebAPI.Controllers
         }
 
         [HttpPost]
-        public async Task<IActionResult> Post(Cliente cliente)
+        public async Task<IActionResult> Post(NewClienteModelView newCliente)
         {
-            var novoCliente = await _clienteManager.InsertClientAsync(cliente);
-            return CreatedAtAction(nameof(GetById), new { id = cliente.Id }, cliente);
+            var insertedCliente = await _clienteManager.InsertClientAsync(newCliente);
+            return CreatedAtAction(nameof(GetById), new { id = insertedCliente.Id }, insertedCliente);
         }
 
         [HttpPut()]
-        public async Task<IActionResult> Put(Cliente cliente)
+        public async Task<IActionResult> Put(UpdateClienteModelView cliente)
         {
             var clienteAQtualizado = await _clienteManager.UpdateClientAsync(cliente);
             if(clienteAQtualizado == null)

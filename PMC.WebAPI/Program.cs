@@ -6,6 +6,7 @@ using PMC.Data.Context;
 using PMC.Data.Repositories;
 using PMC.Manager.Implementation;
 using PMC.Manager.Interfaces;
+using PMC.Manager.Mappings;
 using PMC.Manager.Validators;
 using System.Globalization;
 
@@ -16,6 +17,8 @@ string strConnection = builder.Configuration.GetConnectionString("PMC_Connection
 // Add services to the container.
 
 builder.Services.AddControllers();
+
+builder.Services.AddAutoMapper(typeof(NewClientMappingProfile), typeof(UpdateClienteMappingProfile));
 
 //maneiras descontinuadas de add fluent validation:
 
@@ -29,7 +32,8 @@ builder.Services.AddControllers();
 builder.Services.AddFluentValidationAutoValidation();
 builder.Services.AddFluentValidationClientsideAdapters();
 ValidatorOptions.Global.LanguageManager.Culture = new CultureInfo("pt-BR");
-builder.Services.AddValidatorsFromAssemblyContaining<ClienteValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<NewClienteValidator>();
+builder.Services.AddValidatorsFromAssemblyContaining<UpdateClienteValidator>();
 
 //contexts
 builder.Services.AddDbContext<PMC_Context>(options => options.UseSqlServer(strConnection));

@@ -26,8 +26,7 @@ namespace PMC.WebAPI.Initializer
             //initialize Swagger
             var swaggerConfig = new SwaggerConfig();
             swaggerConfig.ConfigureSwagger(app.Services);
-            
-
         }
+
     }
 }

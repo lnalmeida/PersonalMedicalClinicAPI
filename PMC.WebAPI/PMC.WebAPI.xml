@@ -1,0 +1,38 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PMC.WebAPI</name>
+    </assembly>
+    <members>
+        <member name="M:PMC.WebAPI.Controllers.ClientesController.Get">
+            <summary>
+            Retorna todos os clientes cadastrados na base.
+            </summary>
+        </member>
+        <member name="M:PMC.WebAPI.Controllers.ClientesController.GetById(System.Int32)">
+            <summary>
+            Retorna um cliente específico, através do Id.
+            </summary>
+            <param name="id" example="4">Id do cliente</param>
+        </member>
+        <member name="M:PMC.WebAPI.Controllers.ClientesController.Post(PMC.Core.Shared.ModelViews.NewClienteModelView)">
+            <summary>
+            Insere um novo registro de cliente na base.
+            </summary>
+            <param name="newCliente"></param>
+        </member>
+        <member name="M:PMC.WebAPI.Controllers.ClientesController.Put(PMC.Core.Shared.ModelViews.UpdateClienteModelView)">
+            <summary>
+            Atualiza o registro de um cliente específico, buscando pelo Id.
+            </summary>
+            <param name="cliente"></param>
+        </member>
+        <member name="M:PMC.WebAPI.Controllers.ClientesController.Delete(System.Int32)">
+            <summary>
+            Deleta o registro de um cliente específico, buscando pelo Id.
+            </summary>
+            <param name="id" example="11" >Id do cliente</param>
+            <remarks>Ao excluir um cliente, ele será permanentemente excluído da base.</remarks>
+        </member>
+    </members>
+</doc>

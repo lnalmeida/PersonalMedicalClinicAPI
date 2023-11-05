@@ -6,8 +6,15 @@ using System.Threading.Tasks;
 
 namespace PMC.Core.Shared.ModelViews
 {
-    public  class UpdateClienteModelView: NewClienteModelView
+    /// <summary>
+    /// Objeto utilizado para atualização de dados de um cliente.
+    /// </summary>
+    public class UpdateClienteModelView: NewClienteModelView
     {
+        /// <summary>
+        /// Id do cliente a ser atualizado.
+        /// </summary>
+        /// <example>1</example>
         public int Id { get; set; }
     }
 }

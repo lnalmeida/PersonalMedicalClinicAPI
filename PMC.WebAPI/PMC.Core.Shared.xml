@@ -1,0 +1,60 @@
+<?xml version="1.0"?>
+<doc>
+    <assembly>
+        <name>PMC.Core.Shared</name>
+    </assembly>
+    <members>
+        <member name="T:PMC.Core.Shared.ModelViews.NewClienteModelView">
+            <summary>
+            Objeto utilizado para inserção de um novo cliente.
+            </summary>
+        </member>
+        <member name="P:PMC.Core.Shared.ModelViews.NewClienteModelView.Name">
+            <summary>
+            Nome do cliente.
+            </summary> 
+            <example>José da Silva</example>
+        </member>
+        <member name="P:PMC.Core.Shared.ModelViews.NewClienteModelView.BirthDate">
+            <summary>
+            Data de nascimento do cliente.
+            </summary>
+            <example>1976-01-01</example>
+        </member>
+        <member name="P:PMC.Core.Shared.ModelViews.NewClienteModelView.Gender">
+            <summary>
+            Gênero do cliente, só existem 2.
+            </summary>
+            <example>M</example>
+        </member>
+        <member name="P:PMC.Core.Shared.ModelViews.NewClienteModelView.PhoneNumber">
+            <summary>
+            Telefone do cliente. pode ser no formato (99)99999-9999 ou 9999999999.
+            </summary>
+            <example>(21)98767-9087</example>
+        </member>
+        <member name="P:PMC.Core.Shared.ModelViews.NewClienteModelView.Email">
+            <summary>
+            Email do cliente.
+            </summary>
+            <example>jose.silva@email.com</example>
+        </member>
+        <member name="P:PMC.Core.Shared.ModelViews.NewClienteModelView.Document">
+            <summary>
+            Documento do cliente. RG,CNH ou CPF. Aceita traços e pontos
+            </summary>
+            <example>024.653.984-85</example>
+        </member>
+        <member name="T:PMC.Core.Shared.ModelViews.UpdateClienteModelView">
+            <summary>
+            Objeto utilizado para atualização de dados de um cliente.
+            </summary>
+        </member>
+        <member name="P:PMC.Core.Shared.ModelViews.UpdateClienteModelView.Id">
+            <summary>
+            Id do cliente a ser atualizado.
+            </summary>
+            <example>1</example>
+        </member>
+    </members>
+</doc>

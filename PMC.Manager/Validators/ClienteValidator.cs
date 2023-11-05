@@ -19,15 +19,15 @@ namespace PMC.Manager.Validators
             RuleFor(x => x.Gender).NotNull().NotEmpty().Must(IsMaleOrFemale).WithMessage("O sexo só pode ser M ou F, não existem outros.");
             RuleFor(x => x.PhoneNumber).NotNull().NotEmpty().Matches("(\\(?\\d{2}\\)?\\s)?(\\d{4,5}\\-?\\d{4})").WithMessage("O número de telefone informado não é valido. O formato deve ser 99999999999 ou (99)99999-9999");
             RuleFor(x => x.Document).NotNull().NotEmpty().MinimumLength(4).MaximumLength(14);
-            RuleFor(x => x.Email).NotNull().NotEmpty().Must(IsEmailValid).WithMessage("O e-mail fornecido é inválido");
+            RuleFor(x => x.Email).NotNull().NotEmpty().EmailAddress().WithMessage("O e-mail fornecido é inválido");
         }
 
-        private bool IsEmailValid(string email)
-        {
-            Regex RegExEmailValidation = new Regex(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$");
-            return RegExEmailValidation.Match(email).Success;
+        //private bool IsEmailValid(string email)
+        //{
+        //    Regex RegExEmailValidation = new Regex(@"^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$");
+        //    return RegExEmailValidation.Match(email).Success;
 
-        }
+        //}
 
         private bool IsMaleOrFemale(char gender)
         {

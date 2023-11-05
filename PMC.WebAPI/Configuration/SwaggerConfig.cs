@@ -1,13 +1,17 @@
 ﻿using Microsoft.Extensions.DependencyInjection;
 using Microsoft.OpenApi.Interfaces;
 using Microsoft.OpenApi.Models;
+using FluentValidation.AspNetCore;
+using Swashbuckle.AspNetCore.Swagger;
 using System.Reflection;
+using MicroElements.Swashbuckle.FluentValidation.AspNetCore;
 
 namespace PMC.WebAPI.Configuration
 {
     public class SwaggerConfig
     {
         public SwaggerConfig() { }
+
         public void ConfigureSwagger(IServiceCollection services) 
         {
             services.AddSwaggerGen(c =>
@@ -30,6 +34,7 @@ namespace PMC.WebAPI.Configuration
                         },
                         TermsOfService = new Uri("https://opensource.org/osd")
                     });
+
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile) ;
                 c.IncludeXmlComments(xmlPath);
@@ -38,6 +43,7 @@ namespace PMC.WebAPI.Configuration
                 xmlPath = Path.Combine(AppContext.BaseDirectory, "PMC.Core.xml");
                 c.IncludeXmlComments(xmlPath);
             });
+            services.AddFluentValidationRulesToSwagger();
         }
     }
 }

@@ -38,7 +38,33 @@ namespace PMC.WebAPI.Controllers
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<IActionResult> GetById(int id)
         {
-            return Ok( await _clienteManager.GetClientByIdAsync(id));
+            var cliente = await _clienteManager.GetClientByIdAsync(id);
+            if (cliente == null)
+            {
+                var detailError = new ProblemDetails
+                {
+                    Title = "Error",
+                    Detail = "Cliente não encontrado",
+                    Status = StatusCodes.Status404NotFound,
+                    Extensions = 
+                    {
+                        ["Success"] = false,
+                        ["Data"] = null,
+                    }
+                };
+                return NotFound(detailError);
+            }
+
+            var successDetail = new ProblemDetails
+            {
+                Status = StatusCodes.Status200OK,
+                Extensions =
+                {
+                    ["Success"] = true,
+                    ["Data"] = cliente,
+                }
+            };
+            return Ok(successDetail);
         }
 
         /// <summary>

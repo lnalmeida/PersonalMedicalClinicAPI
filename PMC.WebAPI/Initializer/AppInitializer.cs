@@ -1,4 +1,6 @@
-﻿using PMC.WebAPI.Configuration;
+﻿using Microsoft.EntityFrameworkCore;
+using PMC.Data.Context;
+using PMC.WebAPI.Configuration;
 
 namespace PMC.WebAPI.Initializer
 {
@@ -7,12 +9,15 @@ namespace PMC.WebAPI.Initializer
         public AppInitializer() {}
         public void Initialize(WebApplicationBuilder app, IConfiguration configuration)
         {
+            var env = app.Environment;
+
             //Initialize controllers
             app.Services.AddControllers();
 
             //Initialize Context
             var contextConfig = new ContextConfig();
             contextConfig.ConfigureContext(app.Services, configuration);
+            //contextConfig.DatabaseConfig()
 
             //Initialize AutoMapper
             var autoMapperConfig = new AutoMapperConfig();
@@ -28,5 +33,14 @@ namespace PMC.WebAPI.Initializer
             swaggerConfig.ConfigureSwagger(app.Services);
         }
 
+        public void DatabaseInitilize(WebApplicationBuilder webapp) 
+        {
+            using var scope = webapp.Services.BuildServiceProvider().CreateScope();
+            using var context = scope.ServiceProvider.GetService<PMC_Context>();
+            if(context != null && !context.Database.EnsureCreated()) 
+            {
+                context.Database.Migrate();
+            }
+        }
     }
 }

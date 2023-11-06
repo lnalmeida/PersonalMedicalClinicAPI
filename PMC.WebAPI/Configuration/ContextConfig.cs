@@ -12,8 +12,8 @@ namespace PMC.WebAPI.Configuration
         public ContextConfig() { }
         public void ConfigureContext(IServiceCollection services, IConfiguration configuration) 
         {
-            string strConnection = configuration.GetConnectionString("PMC_Connection") ?? string.Empty;
             //contexts
+            string strConnection = configuration.GetConnectionString("PMC_Connection") ?? string.Empty;
             services.AddDbContext<PMC_Context>(options => options.UseSqlServer(strConnection));
 
             //data core life cycle

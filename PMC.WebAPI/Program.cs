@@ -16,8 +16,11 @@ var builder = WebApplication.CreateBuilder(args);
 // initializing app
 var appInitializer = new AppInitializer();
 appInitializer.Initialize(builder, builder.Configuration);
+appInitializer.DatabaseInitilize(builder);
 
 var app = builder.Build();
+
+
 
 // Configure the HTTP request pipeline.
 if (app.Environment.IsDevelopment())

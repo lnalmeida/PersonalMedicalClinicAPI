@@ -4,6 +4,8 @@ using PMC.Core.Domain;
 using PMC.Core.Shared.ModelViews;
 using PMC.Manager.Implementation;
 using PMC.Manager.Interfaces;
+using PMC.WebAPI.Responses;
+using System.Net;
 
 namespace PMC.WebAPI.Controllers
 {
@@ -21,11 +23,13 @@ namespace PMC.WebAPI.Controllers
         /// Retorna todos os clientes cadastrados na base.
         /// </summary>
         [HttpGet]
-        [ProducesResponseType(typeof(Cliente), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GenericResponse<List<Cliente>>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Get()
+        public async Task<ActionResult<GenericResponse<List<Cliente>>>> Get()
         {
-            return Ok( await _clienteManager.GetAllClientsAsync());
+            var clientes = await _clienteManager.GetAllClientsAsync();
+            var responseOK = new GenericResponse<List<Cliente>>(StatusCodes.Status200OK, true, null, clientes.ToList());
+            return responseOK;
         }
 
         /// <summary>
@@ -36,35 +40,17 @@ namespace PMC.WebAPI.Controllers
         [ProducesResponseType(typeof(Cliente), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> GetById(int id)
+        public async Task<ActionResult<GenericResponse<Cliente>>> GetById(int id)
         {
             var cliente = await _clienteManager.GetClientByIdAsync(id);
             if (cliente == null)
             {
-                var detailError = new ProblemDetails
-                {
-                    Title = "Error",
-                    Detail = "Cliente não encontrado",
-                    Status = StatusCodes.Status404NotFound,
-                    Extensions = 
-                    {
-                        ["Success"] = false,
-                        ["Data"] = null,
-                    }
-                };
-                return NotFound(detailError);
-            }
+                var notFoundResponse = new GenericResponse<Cliente>(StatusCodes.Status404NotFound, false, "Cliente não encontrado", null);
 
-            var successDetail = new ProblemDetails
-            {
-                Status = StatusCodes.Status200OK,
-                Extensions =
-                {
-                    ["Success"] = true,
-                    ["Data"] = cliente,
-                }
-            };
-            return Ok(successDetail);
+                return notFoundResponse;
+            }
+            var okResponse = new GenericResponse<Cliente>(StatusCodes.Status200OK, true, null, cliente);
+            return okResponse;
         }
 
         /// <summary>
@@ -72,13 +58,14 @@ namespace PMC.WebAPI.Controllers
         /// </summary>
         /// <param name="newCliente"></param>
         [HttpPost]
-        [ProducesResponseType(typeof(NewClienteModelView), StatusCodes.Status201Created)]
+        [ProducesResponseType(typeof(GenericResponse<NewClienteModelView>), StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Post(NewClienteModelView newCliente)
+        public async Task<ActionResult<GenericResponse<NewClienteModelView>>> Post(NewClienteModelView newCliente)
         {
             var insertedCliente = await _clienteManager.InsertClientAsync(newCliente);
-            return CreatedAtAction(nameof(GetById), new { id = insertedCliente.Id }, insertedCliente);
+            var newClienteInserted = CreatedAtAction(nameof(GetById), new { id = insertedCliente.Id }, insertedCliente);
+            return new GenericResponse<NewClienteModelView>(StatusCodes.Status201Created, true, "Cliente cadastrado com sucesso.", newCliente);
         }
 
         /// <summary>
@@ -86,19 +73,19 @@ namespace PMC.WebAPI.Controllers
         /// </summary>
         /// <param name="cliente"></param>
         [HttpPut()]
-        [ProducesResponseType(typeof(UpdateClienteModelView), StatusCodes.Status200OK)]
+        [ProducesResponseType(typeof(GenericResponse<Cliente>), StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Put(UpdateClienteModelView cliente)
+        public async Task<ActionResult<GenericResponse<Cliente>>> Put(UpdateClienteModelView cliente)
         {
-            var clienteAQtualizado = await _clienteManager.UpdateClientAsync(cliente);
-            if(clienteAQtualizado == null)
+            var clienteAtualizado = await _clienteManager.UpdateClientAsync(cliente);
+            if(clienteAtualizado == null)
             {
-                return BadRequest("Cliente não encontrado");
+                return new GenericResponse<Cliente>(StatusCodes.Status404NotFound, false, "Cliente não encontrado", null);
             }
 
-            return Ok(clienteAQtualizado);  
+            return new GenericResponse<Cliente>(StatusCodes.Status200OK, true, "Cliente atualizado com sucesso.", clienteAtualizado);  
         }
 
         /// <summary>
@@ -107,13 +94,19 @@ namespace PMC.WebAPI.Controllers
         /// <param name="id" example="11" >Id do cliente</param>
         /// <remarks>Ao excluir um cliente, ele será permanentemente excluído da base.</remarks>
         [HttpDelete("{id}")]
-        [ProducesResponseType(StatusCodes.Status204NoContent)]
+        [ProducesResponseType(typeof(GenericResponse<string>), StatusCodes.Status204NoContent)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<IActionResult> Delete(int id)
+        public async Task<ActionResult<GenericResponse<string>>> Delete(int id)
         {
-            await _clienteManager.DeleteClientAsync(id);
-            return NoContent();
+            try
+            {
+                await _clienteManager.DeleteClientAsync(id);
+                return new GenericResponse<string>(StatusCodes.Status204NoContent, true, "Cliente deletado com sucesso", null);
+            } catch (Exception ex)
+            {
+                return new GenericResponse<string>(StatusCodes.Status500InternalServerError, false, "Erro ao deletar cliente.", ex.Message);
+            }
         }
     }
 }

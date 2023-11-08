@@ -9,7 +9,6 @@ namespace PMC.WebAPI.Initializer
         public AppInitializer() {}
         public void Initialize(WebApplicationBuilder app, IConfiguration configuration)
         {
-            var env = app.Environment;
 
             //Initialize controllers
             app.Services.AddControllers();
@@ -37,7 +36,7 @@ namespace PMC.WebAPI.Initializer
         {
             using var scope = webapp.Services.BuildServiceProvider().CreateScope();
             using var context = scope.ServiceProvider.GetService<PMC_Context>();
-            if(context != null && !context.Database.EnsureCreated()) 
+            if(context != null && context.Database.EnsureCreated()) 
             {
                 context.Database.Migrate();
             }

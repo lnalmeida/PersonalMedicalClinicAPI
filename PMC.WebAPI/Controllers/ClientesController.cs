@@ -37,7 +37,7 @@ namespace PMC.WebAPI.Controllers
         /// </summary>
         /// <param name="id" example="4">Id do cliente</param>
         [HttpGet("{id}")]
-        [ProducesResponseType(typeof(Cliente), StatusCodes.Status200OK)]
+        [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status404NotFound)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
         public async Task<ActionResult<GenericResponse<Cliente>>> GetById(int id)
@@ -45,12 +45,9 @@ namespace PMC.WebAPI.Controllers
             var cliente = await _clienteManager.GetClientByIdAsync(id);
             if (cliente == null)
             {
-                var notFoundResponse = new GenericResponse<Cliente>(StatusCodes.Status404NotFound, false, "Cliente não encontrado", null);
-
-                return notFoundResponse;
+                return new GenericResponse<Cliente>(StatusCodes.Status404NotFound, false, "Cliente não encontrado", null);
             }
-            var okResponse = new GenericResponse<Cliente>(StatusCodes.Status200OK, true, null, cliente);
-            return okResponse;
+            return new GenericResponse<Cliente>(StatusCodes.Status200OK, true, null, cliente);
         }
 
         /// <summary>
@@ -58,14 +55,14 @@ namespace PMC.WebAPI.Controllers
         /// </summary>
         /// <param name="newCliente"></param>
         [HttpPost]
-        [ProducesResponseType(typeof(GenericResponse<NewClienteModelView>), StatusCodes.Status201Created)]
+        [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(ProblemDetails), StatusCodes.Status500InternalServerError)]
-        public async Task<ActionResult<GenericResponse<NewClienteModelView>>> Post(NewClienteModelView newCliente)
+        public async Task<ActionResult<GenericResponse<Cliente>>> Post(NewClienteModelView newCliente)
         {
             var insertedCliente = await _clienteManager.InsertClientAsync(newCliente);
             var newClienteInserted = CreatedAtAction(nameof(GetById), new { id = insertedCliente.Id }, insertedCliente);
-            return new GenericResponse<NewClienteModelView>(StatusCodes.Status201Created, true, "Cliente cadastrado com sucesso.", newCliente);
+            return new GenericResponse<Cliente>(StatusCodes.Status201Created, true, "Cliente cadastrado com sucesso.", insertedCliente);
         }
 
         /// <summary>

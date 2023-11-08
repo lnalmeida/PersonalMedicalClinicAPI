@@ -34,5 +34,28 @@
             <param name="id" example="11" >Id do cliente</param>
             <remarks>Ao excluir um cliente, ele será permanentemente excluído da base.</remarks>
         </member>
+        <member name="P:PMC.WebAPI.Responses.GenericResponse`1.StatusCode">
+            <summary>
+            Status da resposta
+            </summary>
+            <example>200</example>
+        </member>
+        <member name="P:PMC.WebAPI.Responses.GenericResponse`1.Success">
+            <summary>
+            Sucesso: true ou false
+            </summary>
+            <example>true</example>
+        </member>
+        <member name="P:PMC.WebAPI.Responses.GenericResponse`1.Message">
+            <summary>
+            Mensagem da resposta, caso haja
+            </summary>
+            <example>Mensagem de sucesso ou erro</example>
+        </member>
+        <member name="P:PMC.WebAPI.Responses.GenericResponse`1.Data">
+            <summary>
+            Corpo da resposta, caso haja
+            </summary>
+        </member>
     </members>
 </doc>

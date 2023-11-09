@@ -1,6 +1,10 @@
 ﻿using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.DependencyInjection;
 using PMC.Data.Context;
 using PMC.WebAPI.Configuration;
+using Serilog;
+using Serilog.Events;
+using Serilog.Extensions.Hosting;
 
 namespace PMC.WebAPI.Initializer
 {

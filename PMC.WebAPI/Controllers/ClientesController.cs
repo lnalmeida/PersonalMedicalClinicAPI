@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Connections;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using PMC.Core.Domain;
 using PMC.Core.Shared.ModelViews;
@@ -14,9 +15,11 @@ namespace PMC.WebAPI.Controllers
     public class ClientesController : ControllerBase
     {
         private readonly IClienteManager _clienteManager;
-        public ClientesController(IClienteManager clienteManager) 
+        private readonly ILogger<ClientesController> _logger;
+        public ClientesController(IClienteManager clienteManager, ILogger<ClientesController> logger) 
         {
             _clienteManager = clienteManager;
+            _logger = logger;
         }
 
         /// <summary>
@@ -29,6 +32,7 @@ namespace PMC.WebAPI.Controllers
         {
             var clientes = await _clienteManager.GetAllClientsAsync();
             var responseOK = new GenericResponse<List<Cliente>>(StatusCodes.Status200OK, true, null, clientes.ToList());
+            _logger.LogInformation($"[GET] - Clientes retornados com sucesso.");
             return responseOK;
         }
 
@@ -45,8 +49,10 @@ namespace PMC.WebAPI.Controllers
             var cliente = await _clienteManager.GetClientByIdAsync(id);
             if (cliente == null)
             {
+                _logger.LogInformation($"[GET] - Erro - Cliente com o´Id: {id} não encontrado");
                 return new GenericResponse<Cliente>(StatusCodes.Status404NotFound, false, "Cliente não encontrado", null);
             }
+            _logger.LogInformation($"[GET] - Cliente com Id: {cliente.Id} encontrado");
             return new GenericResponse<Cliente>(StatusCodes.Status200OK, true, null, cliente);
         }
 
@@ -62,6 +68,7 @@ namespace PMC.WebAPI.Controllers
         {
             var insertedCliente = await _clienteManager.InsertClientAsync(newCliente);
             var newClienteInserted = CreatedAtAction(nameof(GetById), new { id = insertedCliente.Id }, insertedCliente);
+            _logger.LogInformation($"[POST] - Cliente cadastrado com sucesso");
             return new GenericResponse<Cliente>(StatusCodes.Status201Created, true, "Cliente cadastrado com sucesso.", insertedCliente);
         }
 
@@ -79,9 +86,10 @@ namespace PMC.WebAPI.Controllers
             var clienteAtualizado = await _clienteManager.UpdateClientAsync(cliente);
             if(clienteAtualizado == null)
             {
+                _logger.LogInformation($"[PUT] - Erro - Cliente com Id: {cliente.Id} não encontrado");
                 return new GenericResponse<Cliente>(StatusCodes.Status404NotFound, false, "Cliente não encontrado", null);
             }
-
+            _logger.LogInformation($"[PUT] -  Cliente Atualizado com sucesso.");
             return new GenericResponse<Cliente>(StatusCodes.Status200OK, true, "Cliente atualizado com sucesso.", clienteAtualizado);  
         }
 
@@ -99,9 +107,11 @@ namespace PMC.WebAPI.Controllers
             try
             {
                 await _clienteManager.DeleteClientAsync(id);
+                _logger.LogInformation($"[DELETE] - Cliente deletado com sucesso.");
                 return new GenericResponse<string>(StatusCodes.Status204NoContent, true, "Cliente deletado com sucesso", null);
             } catch (Exception ex)
             {
+                _logger.LogInformation($"[DELETE] - Erro ao deletar cliente: {ex.Message}");
                 return new GenericResponse<string>(StatusCodes.Status500InternalServerError, false, "Erro ao deletar cliente.", ex.Message);
             }
         }

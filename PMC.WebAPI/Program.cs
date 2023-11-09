@@ -8,7 +8,12 @@ using PMC.Manager.Implementation;
 using PMC.Manager.Interfaces;
 using PMC.Manager.Mappings;
 using PMC.Manager.Validators;
+using PMC.WebAPI.Configuration;
 using PMC.WebAPI.Initializer;
+using Serilog;
+using Serilog.AspNetCore;
+using Serilog.Events;
+using Serilog.Extensions.Hosting;
 using System.Globalization;
 
 var builder = WebApplication.CreateBuilder(args);
@@ -17,9 +22,9 @@ var builder = WebApplication.CreateBuilder(args);
 var appInitializer = new AppInitializer();
 appInitializer.Initialize(builder, builder.Configuration);
 appInitializer.DatabaseInitilize(builder);
+SerilogConfig.ConfigureLogger(); 
 
 var app = builder.Build();
-
 
 
 // Configure the HTTP request pipeline.
@@ -29,9 +34,11 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+
 app.UseHttpsRedirection();
 
 app.UseAuthorization();
+
 
 app.MapControllers();
 
